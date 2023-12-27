@@ -21,9 +21,7 @@ functions.cloudEvent('chapter', async cloudEvent => {
 
         const uploadsFolderResponse = await drive.files.list({
           q: `name='${uploadsFolderName}' and mimeType='application/vnd.google-apps.folder'`,
-          fields: 'files(id)',
-          includeItemsFromAllDrives: true, 
-          supportsAllDrives: true
+          fields: 'files(id)'
         });
       
         const uploadsFolderId = uploadsFolderResponse.data.files[0].id
@@ -31,9 +29,7 @@ functions.cloudEvent('chapter', async cloudEvent => {
          const res = await drive.files.list({
           q:  `(name contains 'Chapter') and (not '${uploadsFolderId}'  in parents)`, 
           files: 'files(id,name)', 
-          orderBy: 'name',
-          includeItemsFromAllDrives: true, 
-          supportsAllDrives: true
+          orderBy: 'name'
          });
        
          const files = res.data.files
@@ -43,7 +39,7 @@ functions.cloudEvent('chapter', async cloudEvent => {
          console.log("Today's chapters: " + todaysChapters.join(" "))
         //chaptersNotUploaded contains the list of chapters that are supposed to be uploaded but have not been  
          const chaptersNotUploaded = []
-         
+
          //Check if the chapters to upload today have been uploaded
          files.forEach((f)=>{
             const chapterName = getChapterNumber(f.name)
@@ -61,7 +57,7 @@ functions.cloudEvent('chapter', async cloudEvent => {
          if (chaptersNotUploaded.length > 0){
            
            
-              bot.sendMessage(chatId, `${chaptersNotUploaded.length} chapter${chaptersNotUploaded.length > 1? 's': ''} not uploaded today: \n ${chaptersNotUploaded.join('\n')} \n https://admin-v2.wuxiaworld.com/novels/i-have-a-sword/chapters`)
+              bot.sendMessage(chatId, `${chaptersNotUploaded.length} chapter${chaptersNotUploaded.length > 1? 's': ''} not uploaded today: \n ${chaptersNotUploaded.join('\n')} \n `)
               return 
             
           } else{
