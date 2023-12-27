@@ -39,7 +39,7 @@ Add the bot to your chat and obtain the chat ID.
     ```
 
 ## Architecture 
-![Alt text](image.png)
+![Alt text](architecture.png)
 
 ## Local testing
 We definitely want to test our function directly in our development environment. While the deployed function will assume the service account as its identity when running on the cloud, we will need to take the following steps to test the function locally. 
@@ -82,7 +82,6 @@ curl localhost:8080 -X POST -d '{"key": "value"}'
 Not even going to dump the link to the Google Drive Documentation page because there is nothing there that is useful for this section. Anyway, heres what you got to do: 
 
 1. Inside the google drive you want to share with the Cloud Function, hit the down arrow and share. 
-![Alt text](image-2.png)
 
 2. Grab the service account of the Cloud Function and add it as a viewer for the Drive. 
 
