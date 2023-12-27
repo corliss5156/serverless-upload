@@ -1,0 +1,12 @@
+{
+    "dependencies": {
+        "googleapis": "^129.0.0",
+        "node-telegram-bot-api": "^0.64.0"
+    },
+    "devDependencies": {
+        "@google-cloud/functions-framework": "^3.3.0"
+    },
+    "scripts": {
+        "start": "npx functions-framework --target=chapter"
+    }
+}
