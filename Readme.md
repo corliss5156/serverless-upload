@@ -1,37 +1,21 @@
-# Google Cloud Function for Chapter Upload Notification
+# Chapter Upload Notification
 
-This Google Cloud Function project is designed to notify a Telegram chat about chapters that need to be uploaded to Google Drive on a daily basis. The function is triggered daily by a cron job that runs on cloud scheduler. 
+The Chapter Upload is a serverless function written in NodeJS thatutilizes the Drive API to check for daily upload of chatpters in a Google Drive folder. It notify a Telegram chat about chapters that need to be uploaded to Google Drive on a daily basis. The function is triggered daily by a cron job that runs on cloud scheduler. 
 
-## Requirements
-- Node.js (v14 or later)
-- npm (Node Package Manager)
-- [Google Cloud Functions Framework](https://cloud.google.com/functions/docs/functions-framework)
-- [Google APIs Client Library](https://developers.google.com/drive/api/guides/about-sdk) 
-- Node Telegram Bot API
+## Functionality
 
-## Installation
+- **Data Source**: Reads metadata of google documents in google drive folder. 
+- **Telegram Notification**: Notifies telegram chat of status of chapter upload 
 
-1. Clone the repository:
-
-    ```bash
-    git clone https://github.com/corliss5156/serverless-upload
-    ```
-
-2. Install dependencies:
-
-    ```bash
-    cd your-repository
-    npm install
-    ```
-
-3. Set up a Telegram bot and obtain the bot token. [Step by step guide](https://core.telegram.org/bots/features#creating-a-new-bot). 
+## Deployment 
+1. Set up a Telegram bot and obtain the bot token. [Step by step guide](https://core.telegram.org/bots/features#creating-a-new-bot). 
 The bot was added to a group chat and must have permissions to send messages to the telegram group. 
 
 Add the bot to your chat and obtain the chat ID.
 
-4. Set up Google Cloud Platform (GCP) project, enable the Google Drive API, and create credentials for the service account. Ensure the service account has the necessary permissions to access Google Drive.
+2. Set up Google Cloud Platform (GCP) project, enable the Google Drive API, and create credentials for the service account. Ensure the service account has the necessary permissions to access Google Drive.
 
-5. Configure environment variables by creating a `.env` file with the following content. You only need this for local testing. Otherwise, just follow the Secret Manager section. 
+3. Configure environment variables by creating a `.env` file with the following content. You only need this for local testing. Otherwise, just follow the Secret Manager section. 
 
     ```plaintext
     BOT_TOKEN=your-telegram-bot-token
@@ -40,6 +24,23 @@ Add the bot to your chat and obtain the chat ID.
 
 ## Architecture 
 ![Alt text](architecture.png)
+
+
+
+The Cloud Function performs the following steps:
+
+1. Authenticate with Google Drive using the provided credentials and scopes.
+
+2. Retrieve the ID of the "Uploaded" folder in Google Drive.
+
+3. List files in Google Drive that match the criteria (files with names starting with "Chapter" and not in the "Uploaded" folder).
+
+4. Identify chapters to be uploaded today based on the current date and a predefined target date.
+
+5. Check if the identified chapters have already been uploaded to Google Drive.
+
+6. Notify the Telegram chat about any chapters that have not been uploaded today
+
 
 ## Local testing
 We definitely want to test our function directly in our development environment. While the deployed function will assume the service account as its identity when running on the cloud, we will need to take the following steps to test the function locally. 
@@ -99,23 +100,6 @@ Obviously, we don't want to expose our secrets regarding the BOT_TOKEN and CHAT_
 After creating the secrets, you will need to allow the Cloud Function access to the secrets. 
 [Grand access to Cloud Function](https://cloud.google.com/functions/docs/configuring/secrets)
 The 'email address(es) of the members to add.' is just your Cloud Function's service account. This step only allows the Cloud Function to access the secrets stored on Secrets Manager. 
-
-
-## Functionality
-
-The Cloud Function performs the following steps:
-
-1. Authenticate with Google Drive using the provided credentials and scopes.
-
-2. Retrieve the ID of the "Uploaded" folder in Google Drive.
-
-3. List files in Google Drive that match the criteria (files with names starting with "Chapter" and not in the "Uploaded" folder).
-
-4. Identify chapters to be uploaded today based on the current date and a predefined target date.
-
-5. Check if the identified chapters have already been uploaded to Google Drive.
-
-6. Notify the Telegram chat about any chapters that have not been uploaded today.
 
 ## Additional Information
 
